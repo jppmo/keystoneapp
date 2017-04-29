@@ -32,10 +32,15 @@ exports.detectLang = function(req, res, next) {
     var match = req.url.match(/^\/(pt|en)([\/\?].*)?$/i);
 
     if (match) {
-        //req.setLocale(match[1]);
+        req.setLocale(match[1]);
+				//res.setLocale("asd");
+				//i18n.setLocale(req, match[1]);
         // Make locale available in template
         // (necessary until i18n 0.6.x)
-        res.locals.locale = match[1];
+        //res.locals.locale = i18n.getLocale();
+				res.locals.locale = req.getLocale();
+				//console.log(res);
+
         // reset the URL for routing
         req.url = match[2] || '/';
     } else {

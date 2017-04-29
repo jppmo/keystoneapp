@@ -37,6 +37,8 @@ keystone.init({
 	'session': true,
 	'auth': true,
 	'user model': 'User',
+	'cookie secret': '630646b341581be0f8a3307760a70a857859d7b251777dd5c0446d6ae2a3a315f924e94bb26a7f2231a7141b27561d07d6d3c35cc0e3a94fcc859faa3934552e'
+
 });
 
 // Load your project's Models
@@ -46,7 +48,7 @@ keystone.import('models');
 // bundled templates and layouts. Any runtime locals (that should be set uniquely
 // for each request) should be added to ./routes/middleware.js
 keystone.set('locals', {
-	_: require('lodash'),
+	_: require('underscore'),
 	env: keystone.get('env'),
 	utils: keystone.utils,
 	editable: keystone.content.editable,
@@ -55,6 +57,7 @@ keystone.set('locals', {
 
 i18n.configure({
 	locales:['en', 'pt'],
+	cookie: 'language',
 	directory: __dirname + '/locales'
 });
 

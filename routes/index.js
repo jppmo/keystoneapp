@@ -25,7 +25,7 @@ var importRoutes = keystone.importer(__dirname);
 var _ = require('lodash');
 */
 
-var _ = require('lodash'),
+var _ = require('underscore'),
 	keystone = require('keystone'),
 	i18n = require("i18n"),
 	middleware = require('./middleware'),
@@ -33,8 +33,8 @@ importRoutes = keystone.importer(__dirname);
 
 
 // Add-in i18n support
-keystone.pre('routes', middleware.detectLang);
 keystone.pre('routes', i18n.init);
+keystone.pre('routes', middleware.detectLang);
 
 
 // Common Middleware
@@ -59,6 +59,7 @@ exports = module.exports = function (app) {
 
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
+	/*
 	app.use(function(req, res, next){
     let render_old = res.render;
     res.render = function render(vn, opt, cb){
@@ -74,4 +75,5 @@ exports = module.exports = function (app) {
 
     return next();
 	});
+	*/
 };
