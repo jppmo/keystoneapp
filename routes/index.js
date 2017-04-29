@@ -25,7 +25,7 @@ var importRoutes = keystone.importer(__dirname);
 var _ = require('lodash');
 */
 
-var _ = require('underscore'),
+var _ = require('lodash'),
 	keystone = require('keystone'),
 	i18n = require("i18n"),
 	middleware = require('./middleware'),
