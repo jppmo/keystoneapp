@@ -19,15 +19,31 @@ var _ = require('lodash');
 */
 exports.initLocals = function (req, res, next) {
 	res.locals.navLinks = [
-		{ label: 'Home', key: 'home', href: '/' },
-		{ label: 'Blog', key: 'blog', href: '/blog' },
-		{ label: 'Gallery', key: 'gallery', href: '/gallery' },
-		{ label: 'Contact', key: 'contact', href: '/contact' },
+		{ label: 'Home', key: 'home', href: '/' + res.locals.locale },
+		{ label: 'Blog', key: 'blog', href: '/' + res.locals.locale + '/blog' },
+		{ label: 'Gallery', key: 'gallery', href: '/' + res.locals.locale + '/gallery' },
+		{ label: 'Contact', key: 'contact', href: '/' + res.locals.locale +'/contact' },
 	];
 	res.locals.user = req.user;
 	next();
 };
 
+exports.detectLang = function(req, res, next) {
+    var match = req.url.match(/^\/(pt|en)([\/\?].*)?$/i);
+
+    if (match) {
+        //req.setLocale(match[1]);
+        // Make locale available in template
+        // (necessary until i18n 0.6.x)
+        res.locals.locale = match[1];
+        // reset the URL for routing
+        req.url = match[2] || '/';
+    } else {
+        // Here you can redirect to default locale if you want
+    }
+
+    next();
+}
 
 /**
 	Fetches and clears the flashMessages before a view is rendered

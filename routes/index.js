@@ -17,12 +17,28 @@
  * See the Express application routing documentation for more information:
  * http://expressjs.com/api.html#app.VERB
  */
-
-var keystone = require('keystone');
+/*
+var keystone = require('keystone')
+var i18n = require("i18n");
 var middleware = require('./middleware');
 var importRoutes = keystone.importer(__dirname);
+var _ = require('lodash');
+*/
+
+var _ = require('lodash'),
+	keystone = require('keystone'),
+	i18n = require("i18n"),
+	middleware = require('./middleware'),
+importRoutes = keystone.importer(__dirname);
+
+
+// Add-in i18n support
+keystone.pre('routes', middleware.detectLang);
+keystone.pre('routes', i18n.init);
+
 
 // Common Middleware
+
 keystone.pre('routes', middleware.initLocals);
 keystone.pre('render', middleware.flashMessages);
 
@@ -40,7 +56,22 @@ exports = module.exports = function (app) {
 	app.get('/gallery', routes.views.gallery);
 	app.all('/contact', routes.views.contact);
 
+
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
+	app.use(function(req, res, next){
+    let render_old = res.render;
+    res.render = function render(vn, opt, cb){
+        if (_.isNil(opt)){
+            opt = { helpers: { __ : res.locals.__ } };
+        } else {
+            _.set(opt, 'helpers.__', res.locals.__);
+        }
 
+        arguments[1] = opt;
+        return render_old.apply(this, arguments);
+    }
+
+    return next();
+	});
 };
